@@ -1,0 +1,152 @@
+astro
+---
+const navLinks = [
+      { href: '/', label: 'home' },
+      { href: '/projetos', label: 'projetos' },
+      { href: '/artigos', label: 'artigos' },
+];
+
+const interests = ['Computação','Música', 'Livros', 'Jogos', 'Filmes'];
+---
+
+<header>
+      <div class="utility-bar">
+              <nav aria-label="Navegação principal">
+                      {navLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+              </nav>
+              <div class="external">
+                      <a href="https://github.com/MatheusMW21" target="_blank" rel="noopener noreferrer">github</a>
+                      <a href="https://linkedin.com/in/matheuspinheiro08" target="_blank" rel="noopener noreferrer">linkedin</a>
+                      <!-- TODO Fase 4: trocar idioma de verdade, hoje é só visual -->
+                      <button class="lang-toggle" type="button">pt/en</button>
+              </div>
+      </div>
+
+      <div class="hero">
+              <img class="avatar" src="/avatar.jpg" alt="Foto de perfil" />
+              <div class="identity">
+                      <h1 class="name">Matheus Pinheiro</h1>
+                      <p class="tagline"><span class="prompt">&gt;</span>backend developer<span class="cursor"></span></p>
+                      <ul class="interests">
+                              {interests.map((item) => <li>{item}</li>)}
+                      </ul>
+              </div>
+      </div>
+</header>
+
+<style>
+      header {
+              max-width: var(--content-width);
+              margin-inline: auto;
+              padding: var(--space-4);
+      }
+
+      .utility-bar {
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: space-between;
+              gap: var(--space-2);
+              padding-bottom: var(--space-3);
+              border-bottom: 1px solid var(--color-border);
+              font-size: 0.85rem;
+      }
+
+      .utility-bar a,
+      .lang-toggle {
+              color: var(--color-text-muted);
+      }
+
+      .utility-bar a:hover {
+              color: var(--color-highlight);
+      }
+
+      nav,
+      .external {
+              display: flex;
+              gap: var(--space-3);
+              align-items: center;
+      }
+
+      .lang-toggle {
+              font-family: inherit;
+              font-size: inherit;
+              background: none;
+              border: none;
+              cursor: pointer;
+              padding: 0;
+              text-decoration: underline;
+      }
+
+      .hero {
+              display: flex;
+              align-items: center;
+              gap: var(--space-4);
+              padding-top: var(--space-5);
+      }
+
+      .avatar {
+              width: 96px;
+              height: 96px;
+              border-radius: 50%;
+              object-fit: cover;
+              border: 2px solid var(--color-accent);
+              flex-shrink: 0;
+      }
+
+      .name {
+              margin: 0;
+              font-size: 1.75rem;
+              color: var(--color-accent);
+      }
+
+      .tagline {
+              margin: var(--space-1) 0 var(--space-3);
+              color: var(--color-text-muted);
+      }
+
+      .prompt {
+              color: var(--color-highlight);
+              margin-right: var(--space-1);
+      }
+
+      .cursor {
+              display: inline-block;
+              width: 0.5em;
+              height: 1em;
+              margin-left: 2px;
+              background: var(--color-highlight);
+              vertical-align: text-bottom;
+              animation: blink 1s steps(2, start) infinite;
+      }
+
+      @keyframes blink {
+              to {
+                      visibility: hidden;
+              }
+      }
+
+      .interests {
+              display: flex;
+              flex-wrap: wrap;
+              gap: var(--space-2);
+              list-style: none;
+              margin: 0;
+              padding: 0;
+      }
+
+      .interests li {
+              border: 1px solid var(--color-border);
+              border-radius: 4px;
+              padding: var(--space-1) var(--space-2);
+              font-size: 0.85rem;
+              color: var(--color-text-muted);
+      }
+
+      @media (max-width: 640px) {
+              .hero {
+                      flex-direction: column;
+                      align-items: flex-start;
+                      text-align: left;
+              }
+      }
+</style>
