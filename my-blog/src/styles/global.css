@@ -1,8 +1,9 @@
 :root {
   --color-bg: #0d0b12;
+  --color-surface: #141019;
   --color-text: #ede9f3;
   --color-text-muted: #9c93ab;
-  --color-accent: #a855f7;
+  --color-accent: #c084fc;
   --color-highlight: #ef4444;
   --color-border: #2a2333;
   --font-mono:
@@ -14,6 +15,7 @@
   --space-3: 1rem;
   --space-4: 1.5rem;
   --space-5: 2rem;
+  --space-6: 3rem;
 }
 
 *,
@@ -42,4 +44,25 @@ a {
 
 a:hover {
   color: var(--color-highlight);
+}
+
+.prompt {
+  color: var(--color-highlight);
+  margin-right: var(--space-1);
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 2px;
+  background: var(--color-highlight);
+  vertical-align: text-bottom;
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
 }

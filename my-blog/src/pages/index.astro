@@ -1,7 +1,81 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { profile } from '../data/profile';
 ---
 
-<Layout title="Matheus Pinheiro" description="Site pessoal e profissional.">
-      <p>Conteúdo da home (bio, etc.) entra na Fase 2.</p>
+<Layout title={profile.name} description={`Site pessoal e profissional de ${profile.name}.`}>
+      <section class="about">
+              <p class="cmd"><span class="prompt">$</span> cat sobre.md</p>
+              <p>
+                      Hello World! Me chamo Matheus, programo desde [ANO] e tenho muitos interesses. Sou o maior
+                      fã de Beatles, adoro literatura, cinema, video-game e no horário comercial sou {profile.role}{' '}
+                      numa empresa de telecomunicações. Aqui compartilho os meus interesses e projetos pessoais.
+              </p>
+
+              {profile.experience.map((job) => (
+                      <>
+                              <p class="cmd"><span class="prompt">$</span> ls experiencia/{job.empresa}</p>
+                              <ul class="job-list">
+                                      {job.cargos.map((item) => (
+                                              <li>
+                                                      <span class="perm">-rwxr-xr-x</span>
+                                                      <span class="period">{item.periodo}</span>
+                                                      <span class="role">{item.cargo}</span>
+                                              </li>
+                                      ))}
+                              </ul>
+                      </>
+              ))}
+      </section>
+
+      <p class="cmd"><span class="prompt">$</span><span class="cursor"></span></p>
 </Layout>
+
+<style>
+      .about {
+              margin-top: var(--space-6);
+              padding-top: var(--space-5);
+              border-top: 1px solid var(--color-border);
+      }
+
+      .cmd {
+              margin: 0 0 var(--space-3);
+      }
+
+      .about p:not(.cmd) {
+              margin: 0 0 var(--space-4);
+      }
+
+      .job-list {
+              list-style: none;
+              margin: 0 0 var(--space-4);
+              padding: 0;
+              display: flex;
+              flex-direction: column;
+              gap: var(--space-1);
+      }
+
+      .job-list li {
+              display: grid;
+              grid-template-columns: auto auto 1fr;
+              gap: var(--space-3);
+      }
+
+      .perm,
+      .period {
+              color: var(--color-text-muted);
+              font-size: 0.85rem;
+              white-space: nowrap;
+      }
+
+      @media (max-width: 640px) {
+              .job-list li {
+                      grid-template-columns: 1fr;
+                      gap: 0;
+              }
+
+              .perm {
+                      display: none;
+              }
+      }
+</style>
