@@ -1,0 +1,11 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectsContent from '../components/ProjectsContent.astro';
+import { useTranslations } from '../i18n/ui';
+
+const t = useTranslations('pt');
+---
+
+<Layout title="Projetos" description={t('projects_description')}>
+	<ProjectsContent />
+</Layout>

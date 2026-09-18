@@ -1,0 +1,56 @@
+---
+import { projects } from '../data/projetos';
+import { useTranslations } from '../i18n/ui';
+
+const lang = Astro.currentLocale === 'en' ? 'en' : 'pt';
+const t = useTranslations(lang);
+---
+
+<section class="projects">
+	<p class="cmd"><span class="prompt">$</span> {t('projects_cmd')}</p>
+	<div class="project-list">
+		{projects.map((project) => (
+			<article class="project">
+				<h2><a href={project.url} target="_blank" rel="noopener noreferrer">{project.title}</a></h2>
+				<p>{project.description[lang]}</p>
+			</article>
+		))}
+	</div>
+</section>
+
+<style>
+	.projects {
+		margin-top: var(--space-6);
+		padding-top: var(--space-5);
+		border-top: 1px solid var(--color-border);
+	}
+
+	.cmd {
+		margin: 0 0 var(--space-4);
+	}
+
+	.project-list {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-5);
+	}
+
+	.project h2 {
+		margin: 0 0 var(--space-1);
+		font-size: 1.1rem;
+	}
+
+	.project h2 a {
+		color: var(--color-accent);
+		text-decoration: none;
+	}
+
+	.project h2 a:hover {
+		color: var(--color-highlight);
+	}
+
+	.project p {
+		margin: 0;
+		color: var(--color-text-muted);
+	}
+</style>

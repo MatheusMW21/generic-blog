@@ -18,6 +18,16 @@
   --space-6: 3rem;
 }
 
+:root[data-theme="light"] {
+  --color-bg: #f4f1f7;
+  --color-surface: #ffffff;
+  --color-text: #1c1625;
+  --color-text-muted: #6b6478;
+  --color-accent: #7c3aed;
+  --color-highlight: #dc2626;
+  --color-border: #ddd6e3;
+}
+
 *,
 *::before,
 *::after {
@@ -35,6 +45,7 @@ body {
   color: var(--color-text);
   font-family: var(--font-mono);
   line-height: 1.5;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 a {
