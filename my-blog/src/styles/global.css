@@ -16,6 +16,7 @@
   --space-4: 1.5rem;
   --space-5: 2rem;
   --space-6: 3rem;
+  --font-size-meta: 0.85rem;
 }
 
 :root[data-theme="light"] {
@@ -76,4 +77,16 @@ a:hover {
   to {
     visibility: hidden;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+  }
+}
+
+.cmd {
+  font: inherit;
+  font-weight: normal;
+  margin: 0;
 }

@@ -1,79 +1,133 @@
 ---
 import { profile } from '../data/profile';
+import { skills } from '../data/skills';
 import { useTranslations } from '../i18n/ui';
 
 const lang = Astro.currentLocale === 'en' ? 'en' : 'pt';
 const t = useTranslations(lang);
 const p = profile[lang];
+
+const skillGroups = [
+	{ label: t('skills_languages'), items: skills.languages },
+	{ label: t('skills_backend'), items: skills.backend },
+	{ label: t('skills_frontend'), items: skills.frontend },
+	{ label: t('skills_cloud'), items: skills.cloudDevops }
+];
 ---
 
 <section class="about">
-	<p class="cmd"><span class="prompt">$</span> {t('about_cmd')}</p>
-	<p>{p.bio}</p>
+      <h2 class="cmd"><span class="prompt" aria-hidden="true">$</span> {t('about_cmd')}</h2>
+      <p>{p.bio}</p>
 
-	{p.experience.map((job) => (
-		<>
-			<p class="cmd"><span class="prompt">$</span> {t('experience_cmd_prefix')}{job.empresa}</p>
-			<ul class="job-list">
-				{job.cargos.map((item) => (
-					<li>
-						<span class="perm">-rwxr-xr-x</span>
-						<span class="period">{item.periodo}</span>
-						<span class="role">{item.cargo}</span>
-					</li>
-				))}
-			</ul>
-		</>
-	))}
+      <h2 class="cmd"><span class="prompt" aria-hidden="true">$</span> {t('skills_cmd')}</h2>
+      <ul class="skills-list">
+              {skillGroups.map((group) => (
+                      <li>
+                              <span class="skill-label">{group.label}</span>
+                              <span class="skill-items">{group.items.join(', ')}</span>
+                      </li>
+              ))}
+      </ul>
+
+      <h2 class="cmd"><span class="prompt" aria-hidden="true">$</span> {t('experience_cmd_prefix')}</h2>
+      <ul class="job-list">
+              {p.experience.map((job) => (
+                      <li class="job">
+                              <div class="job-head">
+                                      <span class="job-title">{job.cargo} · {job.empresa}</span>
+                                      <span class="period">{job.periodo}</span>
+                              </div>
+                              <ul class="job-highlights">
+                                      {job.destaques.map((item) => <li>{item}</li>)}
+                              </ul>
+                      </li>
+              ))}
+      </ul>
 </section>
 
-<p class="cmd"><span class="prompt">$</span><span class="cursor"></span></p>
+<p class="cmd" aria-hidden="true"><span class="prompt">$</span><span class="cursor"></span></p>
 
 <style>
-	.about {
-		margin-top: var(--space-6);
-		padding-top: var(--space-5);
-		border-top: 1px solid var(--color-border);
-	}
+      .about {
+              margin-top: var(--space-4);
+              padding-top: var(--space-5);
+              border-top: 1px solid var(--color-border);
+      }
 
-	.cmd {
-		margin: 0 0 var(--space-3);
-	}
+      .cmd {
+              margin: 0 0 var(--space-3);
+      }
 
-	.about p:not(.cmd) {
-		margin: 0 0 var(--space-4);
-	}
+      .about p:not(.cmd) {
+              margin: 0 0 var(--space-4);
+      }
 
-	.job-list {
-		list-style: none;
-		margin: 0 0 var(--space-4);
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-1);
-	}
+      .skills-list {
+              list-style: none;
+              margin: 0 0 var(--space-4);
+              padding: 0;
+              display: flex;
+              flex-direction: column;
+              gap: var(--space-1);
+      }
 
-	.job-list li {
-		display: grid;
-		grid-template-columns: auto auto 1fr;
-		gap: var(--space-3);
-	}
+      .skills-list li {
+              display: grid;
+              grid-template-columns: 9em 1fr;
+              gap: var(--space-3);
+      }
 
-	.perm,
-	.period {
-		color: var(--color-text-muted);
-		font-size: 0.85rem;
-		white-space: nowrap;
-	}
+      .skill-label {
+              color: var(--color-text-muted);
+              font-size: var(--font-size-meta);
+      }
 
-	@media (max-width: 640px) {
-		.job-list li {
-			grid-template-columns: 1fr;
-			gap: 0;
-		}
+      .job-list {
+              list-style: none;
+              margin: 0;
+              padding: 0;
+              display: flex;
+              flex-direction: column;
+              gap: var(--space-4);
+      }
 
-		.perm {
-			display: none;
-		}
-	}
+      .job-head {
+              display: flex;
+              flex-direction: column;
+              gap: 2px;
+              margin-bottom: var(--space-1);
+      }
+
+      .job-title {
+              color: var(--color-accent);
+      }
+
+      .period {
+              color: var(--color-text-muted);
+              font-size: var(--font-size-meta);
+              white-space: nowrap;
+      }
+
+      .job-highlights {
+              list-style: none;
+              margin: 0;
+              padding: 0;
+              display: flex;
+              flex-direction: column;
+              gap: var(--space-1);
+              color: var(--color-text);
+              font-size: 1rem;
+      }
+
+      .job-highlights li::before {
+              content: '– ';
+              color: var(--color-highlight);
+      }
+
+      @media (max-width: 640px) {
+              .skills-list li {
+                      grid-template-columns: 1fr;
+                      gap: 0;
+              }
+      }
 </style>

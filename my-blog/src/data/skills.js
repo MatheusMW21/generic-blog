@@ -1,0 +1,26 @@
+export const skills = {
+  languages: ["JavaScript", "TypeScript", "C# (.NET)", "SQL"],
+  backend: ["Node.js", ".NET", "Prisma ORM", "EF Core", "JWT", "Clerk"],
+  frontend: [
+    "React.js",
+    "Next.js",
+    "React Native (Expo)",
+    "Tailwind CSS",
+    "Shadcn UI",
+    "TanStack Query",
+    "Zustand",
+  ],
+  cloudDevops: [
+    "Azure (Service Bus, App Service)",
+    "PostgreSQL",
+    "SQL Server",
+    "MongoDB",
+    "Docker",
+    "Git",
+    "GitHub Actions",
+    "Azure DevOps",
+    "CI/CD",
+    "xUnit",
+    "Swagger",
+  ],
+};
