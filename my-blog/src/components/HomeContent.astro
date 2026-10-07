@@ -24,7 +24,9 @@ const skillGroups = [
               {skillGroups.map((group) => (
                       <li>
                               <span class="skill-label">{group.label}</span>
-                              <span class="skill-items">{group.items.join(', ')}</span>
+                              <span class="skill-items badge-list">
+                                        {group.items.map((item) => <span class="badge">{item}</span>)}
+                              </span>
                       </li>
               ))}
       </ul>
