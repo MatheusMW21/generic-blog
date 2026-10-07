@@ -3,6 +3,7 @@ export const profile = {
   social: {
     github: "https://github.com/MatheusMW21",
     linkedin: "https://linkedin.com/in/matheuspinheiro08",
+    email: "matheusmw21@gmail.com",
   },
   pt: {
     role: "desenvolvedor fullstack · backend",

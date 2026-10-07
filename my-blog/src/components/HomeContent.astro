@@ -45,6 +45,19 @@ const skillGroups = [
                       </li>
               ))}
       </ul>
+
+      <h2 class="cmd"><span class="prompt" aria-hidden="true">$</span> {t('contact_cmd')}</h2>
+      <p class="contact">
+        <a href={`mailto:${profile.social.email}`}>{profile.social.email}</a>
+        <button
+                class="copy-email"
+                type="button"
+                data-email={profile.social.email}
+                data-copied-label={t('copy_email_copied')}
+        >
+                {t('copy_email_label')}        
+        </button>
+      </p>
 </section>
 
 <p class="cmd" aria-hidden="true"><span class="prompt">$</span><span class="cursor"></span></p>
@@ -86,7 +99,7 @@ const skillGroups = [
 
       .job-list {
               list-style: none;
-              margin: 0;
+              margin: 0 0 var(--space-4);
               padding: 0;
               display: flex;
               flex-direction: column;
@@ -132,4 +145,46 @@ const skillGroups = [
                       gap: 0;
               }
       }
+      .contact {
+              display: flex;
+              flex-wrap: wrap;
+              align-items: center;
+              gap: var(--space-3);
+      }
+
+      .contact a {
+              color: var(--color-accent);
+      }
+
+      .copy-email {
+              font-family: inherit;
+              font-size: var(--font-size-meta);
+              background: none;
+              border: 1px solid var(--color-border);
+              border-radius: 4px;
+              padding: 2px var(--space-2);
+              color: var(--color-text-muted);
+              cursor: pointer;
+      }
+
+      .copy-email:hover {
+              color: var(--color-highlight);
+              border-color: var(--color-highlight);
+      }
+
 </style>
+
+<script>
+      const button = document.querySelector<HTMLButtonElement>('.copy-email');
+      const defaultLabel = button?.textContent?.trim() ?? '';
+
+      button?.addEventListener('click', async () => {
+              const email = button.dataset.email;
+              if (!email) return;
+              await navigator.clipboard.writeText(email);
+              button.textContent = button.dataset.copiedLabel ?? defaultLabel;
+              setTimeout(() => {
+                      button.textContent = defaultLabel;
+              }, 1500);
+      });
+</script>
