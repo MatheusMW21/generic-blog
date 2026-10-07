@@ -14,12 +14,12 @@ export const projects = [
     ],
     destaques: {
       pt: [
-        "API RESTful servindo painel administrativo, portal do cliente/corretor e app mobile (Expo/React Native) em produção com ~50 usuários ativos.",
+        "Sistema com +20 mil leads migrados e ~2 mil imóveis ativos em produção, com dados migrados de plataforma legada.",
         "Autenticação com Clerk, controle de acesso por papel (admin, cliente, corretor) e app publicado no TestFlight via pipeline EAS Build + EAS Submit.",
         "Arquitetura com Next.js 16 App Router, Prisma ORM, PostgreSQL e deploy containerizado via Docker.",
       ],
       en: [
-        "RESTful API serving an admin panel, client/broker portal, and mobile app (Expo/React Native), live in production with ~50 active users.",
+        "System with 20k+ migrated leads and ~2k active property listings in production, with data migrated from a legacy platform.",
         "Implemented Clerk authentication, role-based access control (admin, client, broker), and published the mobile app on TestFlight via EAS Build + EAS Submit pipeline.",
         "Architecture built with Next.js 16 App Router, Prisma ORM, PostgreSQL, and containerized deployment via Docker.",
       ],
