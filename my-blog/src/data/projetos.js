@@ -61,6 +61,24 @@ export const projects = [
     },
   },
   {
+    title: "Fifinha",
+    url: "https://github.com/MatheusMW21/fifinha-app",
+    stack: ["React Native", "Expo", "Expo Router", "Zustand", "TypeScript"],
+    description: {
+      pt: "App mobile para sorteio de times no EA FC entre amigos, com balanceamento por diferença máxima de overall, filtro de liga, modo Champions League com confrontos por rodada e histórico de sorteios da sessão.",
+      en: "Mobile app to randomly draw EA FC teams between friends, with balancing by max overall difference, league filter, Champions League bracket mode, and session draw history.",
+    },
+  },
+  {
+    title: "YouTube Hide Shorts",
+    url: "https://github.com/MatheusMW21/youtube-hide-shorts",
+    stack: ["JavaScript", "CSS"],
+    description: {
+      pt: "Script de browser que remove automaticamente os Shorts da interface do YouTube, mantendo apenas o conteúdo de vídeo tradicional.",
+      en: "Browser script that automatically removes Shorts from the YouTube interface, keeping only traditional video content.",
+    },
+  },
+  {
     title: "Web Extension Accessibility",
     url: "https://github.com/TCC-web-extension-accessibility",
     stack: ["React 19", "FastAPI", "Python"],

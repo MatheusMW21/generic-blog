@@ -7,7 +7,7 @@ export const profile = {
   },
   pt: {
     role: "desenvolvedor fullstack · backend",
-    interests: ["Computação", "Música", "Livros", "Jogos", "Filmes"],
+
     bio: "Desenvolvedor Fullstack com foco em Backend, com 3+ anos de experiência em sistemas de alta disponibilidade. Fora do código, sou o maior fã de Beatles e adoro literatura, cinema e video-game e aqui compartilho um pouco dos dois lados.",
     experience: [
       {
@@ -41,7 +41,7 @@ export const profile = {
   },
   en: {
     role: "fullstack developer · backend",
-    interests: ["Computing", "Music", "Books", "Games", "Movies"],
+
     bio: "Fullstack Developer focused on Backend, with 3+ years of experience in high-availability systems. Outside of code, I'm the biggest Beatles fan and love literature, movies, and video games — here I share a bit of both sides.",
     experience: [
       {
