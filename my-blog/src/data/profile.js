@@ -41,9 +41,9 @@ export const profile = {
     ],
   },
   en: {
-    role: "fullstack developer · backend",
+    role: "fullstack developer",
 
-    bio: "Fullstack Developer focused on Backend, with 3+ years of experience in high-availability systems. Outside of code, I'm the biggest Beatles fan and love literature, movies, and video games — here I share a bit of both sides.",
+    bio: "Fullstack Developer, with 3+ years of experience in high-availability systems. Outside of code, I'm the biggest Beatles fan and love literature, movies, and video games — here I share a bit of both sides.",
     experience: [
       {
         empresa: "TeamSix",
