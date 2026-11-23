@@ -52,6 +52,17 @@ const t = useTranslations(lang);
               gap: var(--space-5);
       }
 
+      .project {
+              border-left: 2px solid transparent;
+              padding-left: var(--space-3);
+              transition: border-color 0.2s ease, transform 0.2s ease;
+      }
+
+      .project:hover {
+              border-left-color: var(--color-highlight);
+              transform: translateX(3px);
+      }
+
       .project h2 {
               margin: 0 0 var(--space-1);
               font-size: 1.1rem;

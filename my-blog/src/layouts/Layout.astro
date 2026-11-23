@@ -1,5 +1,6 @@
 ---
 import Header from '../components/Header.astro';
+import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import { profile } from '../data/profile';
 
@@ -32,12 +33,15 @@ const { title, description = 'Blog pessoal e profissional.' } = Astro.props;
               <meta name="description" content={description} />
               <meta name="generator" content={Astro.generator} />
               <title>{title}</title>
+              <ClientRouter />
 
               <meta property="og:type" content="website" />
               <meta property="og:site_name" content={profile.name} />
               <meta property="og:title" content={title} />
               <meta property="og:description" content={description} />
-              <meta property="og:image" content="/avatar.jpg" />
+              <meta property="og:image" content="/og-image.png" />
+              <meta property="og:image:width" content="1200" />
+              <meta property="og:image:height" content="630" />
               <meta name="twitter:card" content="summary" />
       </head>
       <body>
@@ -55,6 +59,40 @@ const { title, description = 'Blog pessoal e profissional.' } = Astro.props;
               </div>
       </body>
 </html>
+
+<script>
+	import gsap from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	function init() {
+		ScrollTrigger.getAll().forEach(t => t.kill());
+
+		const hero = document.querySelector('.hero');
+		if (hero) {
+			gsap.from(hero, { opacity: 0, y: 20, duration: 0.6, ease: 'power2.out', delay: 0.15 });
+		}
+
+		document.querySelectorAll<HTMLElement>('.about > *, .projects > *').forEach(el => {
+			gsap.from(el, {
+				scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+				opacity: 0,
+				y: 14,
+				duration: 0.45,
+				ease: 'power2.out',
+			});
+		});
+	}
+
+	document.addEventListener('astro:before-swap', (e) => {
+		ScrollTrigger.getAll().forEach(t => t.kill());
+		const theme = document.documentElement.dataset.theme;
+		if (theme) (e as any).newDocument.documentElement.dataset.theme = theme;
+	});
+
+	document.addEventListener('astro:page-load', init);
+</script>
 
 <style>
       .terminal-window {

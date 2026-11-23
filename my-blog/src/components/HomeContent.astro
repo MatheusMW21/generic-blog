@@ -2,6 +2,7 @@
 import { profile } from '../data/profile';
 import { skills } from '../data/skills';
 import { useTranslations } from '../i18n/ui';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 
 const lang = Astro.currentLocale === 'en' ? 'en' : 'pt';
 const t = useTranslations(lang);
@@ -13,6 +14,9 @@ const skillGroups = [
 	{ label: t('skills_frontend'), items: skills.frontend },
 	{ label: t('skills_cloud'), items: skills.cloudDevops }
 ];
+
+const projectsUrl = getRelativeLocaleUrl(lang, '/projetos');
+const termUser    = `guest@matheuspinheiro.dev:~$`;
 ---
 
 <section class="about">
@@ -49,18 +53,83 @@ const skillGroups = [
       <h2 class="cmd"><span class="prompt" aria-hidden="true">$</span> {t('contact_cmd')}</h2>
       <p class="contact">
         <a href={`mailto:${profile.social.email}`}>{profile.social.email}</a>
-        <button
-                class="copy-email"
-                type="button"
-                data-email={profile.social.email}
-                data-copied-label={t('copy_email_copied')}
-        >
-                {t('copy_email_label')}        
+        <button class="copy-email" type="button" data-email={profile.social.email} data-copied-label={t('copy_email_copied')}>
+          {t('copy_email_label')}
+        </button>
+        <button class="contact-open" type="button" aria-haspopup="dialog">
+          {t('contact_form_open')} →
         </button>
       </p>
 </section>
 
-<p class="cmd" aria-hidden="true"><span class="prompt">$</span><span class="cursor"></span></p>
+<button
+  class="cli-trigger"
+  aria-label={lang === 'en' ? 'Open terminal' : 'Abrir terminal'}
+  aria-haspopup="dialog"
+  data-lang={lang}
+  data-projects={projectsUrl}
+  data-user={termUser}
+>
+  <span class="prompt" aria-hidden="true">$</span><span class="cursor" aria-hidden="true"></span>
+</button>
+
+<!-- terminal modal -->
+<div class="term-overlay" id="terminal-modal" role="dialog" aria-modal="true" aria-labelledby="term-title">
+  <div class="term-window">
+    <div class="term-titlebar">
+      <span class="dot dot-a"></span>
+      <span class="dot dot-b"></span>
+      <span class="dot dot-c"></span>
+      <span class="term-title" id="term-title">{termUser.replace('$', '').trim()}</span>
+      <button class="term-close" type="button" aria-label="Fechar">✕</button>
+    </div>
+    <div class="term-body" id="term-body"></div>
+    <div class="term-input-row">
+      <span class="term-user" aria-hidden="true">{termUser}</span>
+      <input class="term-input" id="term-input" type="text" autocomplete="off" spellcheck="false"
+        aria-label={lang === 'en' ? 'Command' : 'Comando'} />
+    </div>
+  </div>
+</div>
+
+<!-- contact modal -->
+<div class="modal-overlay" id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <div class="modal-titlebar">
+      <span class="dot dot-a"></span>
+      <span class="dot dot-b"></span>
+      <span class="dot dot-c"></span>
+      <span class="modal-title" id="modal-title">send-message</span>
+      <button class="modal-close" type="button" aria-label="Fechar">✕</button>
+    </div>
+    <div class="modal-body">
+      <form
+        class="contact-form"
+        action="https://formspree.io/f/mvkavdzq"
+        method="POST"
+        data-success={t('contact_form_success')}
+        data-error={t('contact_form_error')}
+      >
+        <div class="form-row">
+          <label for="cf-name">{t('contact_form_name')}</label>
+          <input type="text" id="cf-name" name="name" required autocomplete="name" />
+        </div>
+        <div class="form-row">
+          <label for="cf-email">{t('contact_form_email')}</label>
+          <input type="email" id="cf-email" name="email" required autocomplete="email" />
+        </div>
+        <div class="form-row">
+          <label for="cf-message">{t('contact_form_message')}</label>
+          <textarea id="cf-message" name="message" required rows="4"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="form-submit">{t('contact_form_submit')}</button>
+          <span class="form-status" aria-live="polite"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <style>
       .about {
@@ -113,9 +182,7 @@ const skillGroups = [
               margin-bottom: var(--space-1);
       }
 
-      .job-title {
-              color: var(--color-accent);
-      }
+      .job-title { color: var(--color-accent); }
 
       .period {
               color: var(--color-text-muted);
@@ -140,11 +207,10 @@ const skillGroups = [
       }
 
       @media (max-width: 640px) {
-              .skills-list li {
-                      grid-template-columns: 1fr;
-                      gap: 0;
-              }
+              .skills-list li { grid-template-columns: 1fr; gap: 0; }
       }
+
+      /* ── contact ── */
       .contact {
               display: flex;
               flex-wrap: wrap;
@@ -152,11 +218,10 @@ const skillGroups = [
               gap: var(--space-3);
       }
 
-      .contact a {
-              color: var(--color-accent);
-      }
+      .contact a { color: var(--color-accent); }
 
-      .copy-email {
+      .copy-email,
+      .contact-open {
               font-family: inherit;
               font-size: var(--font-size-meta);
               background: none;
@@ -165,26 +230,432 @@ const skillGroups = [
               padding: 2px var(--space-2);
               color: var(--color-text-muted);
               cursor: pointer;
+              transition: color 0.15s ease, border-color 0.15s ease;
       }
 
-      .copy-email:hover {
-              color: var(--color-highlight);
-              border-color: var(--color-highlight);
+      .copy-email:hover { color: var(--color-highlight); border-color: var(--color-highlight); }
+
+      .contact-open { border-color: var(--color-accent); color: var(--color-accent); }
+      .contact-open:hover { color: var(--color-highlight); border-color: var(--color-highlight); }
+
+      /* ── cli trigger ── */
+      .cli-trigger {
+              font-family: var(--font-mono);
+              font-size: inherit;
+              background: none;
+              border: none;
+              color: inherit;
+              cursor: pointer;
+              padding: 0;
+              display: flex;
+              align-items: center;
+              gap: 0.4em;
+              margin-top: var(--space-3);
       }
 
+      /* ── shared overlay ── */
+      .term-overlay,
+      .modal-overlay {
+              position: fixed;
+              inset: 0;
+              background: rgba(0, 0, 0, 0.65);
+              z-index: 100;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: var(--space-4);
+              opacity: 0;
+              visibility: hidden;
+              pointer-events: none;
+              transition: opacity 0.2s ease, visibility 0.2s ease;
+      }
+
+      .term-overlay.is-open,
+      .modal-overlay.is-open {
+              opacity: 1;
+              visibility: visible;
+              pointer-events: auto;
+      }
+
+      /* ── terminal modal ── */
+      .term-window {
+              background: var(--color-surface);
+              border: 1px solid var(--color-border);
+              border-radius: 10px;
+              box-shadow: 0 20px 68px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
+              width: 100%;
+              max-width: 580px;
+              overflow: hidden;
+              transform: translateY(16px);
+              transition: transform 0.2s ease;
+              display: flex;
+              flex-direction: column;
+      }
+
+      .term-overlay.is-open .term-window { transform: translateY(0); }
+
+      .term-titlebar {
+              display: flex;
+              align-items: center;
+              gap: var(--space-2);
+              padding: var(--space-2) var(--space-3);
+              border-bottom: 1px solid var(--color-border);
+              flex-shrink: 0;
+      }
+
+      .term-title {
+              flex: 1;
+              text-align: center;
+              font-size: 0.8rem;
+              color: var(--color-text-muted);
+      }
+
+      .term-close {
+              font-family: inherit;
+              font-size: 1rem;
+              background: none;
+              border: none;
+              color: var(--color-text-muted);
+              cursor: pointer;
+              padding: 0;
+              line-height: 1;
+              transition: color 0.15s ease;
+      }
+
+      .term-close:hover { color: var(--color-highlight); }
+
+      .term-body {
+              padding: var(--space-3) var(--space-4);
+              min-height: 60px;
+              max-height: 280px;
+              overflow-y: auto;
+              display: flex;
+              flex-direction: column;
+              gap: 2px;
+              flex: 1;
+      }
+
+      .term-line {
+              margin: 0;
+              font-size: var(--font-size-meta);
+              color: var(--color-text-muted);
+              white-space: pre-wrap;
+              word-break: break-word;
+      }
+
+      .term-line--cmd   { color: var(--color-accent); }
+      .term-line--error { color: var(--color-highlight); }
+
+      .term-input-row {
+              display: flex;
+              align-items: center;
+              gap: 0.5em;
+              padding: var(--space-2) var(--space-4) var(--space-3);
+              border-top: 1px solid var(--color-border);
+              flex-shrink: 0;
+      }
+
+      .term-user {
+              color: var(--color-accent);
+              font-size: var(--font-size-meta);
+              white-space: nowrap;
+              flex-shrink: 0;
+      }
+
+      .term-input {
+              flex: 1;
+              font-family: var(--font-mono);
+              font-size: var(--font-size-meta);
+              background: transparent;
+              border: none;
+              outline: none;
+              color: var(--color-text);
+              caret-color: var(--color-accent);
+              min-width: 0;
+              padding: 0;
+      }
+
+      /* ── contact modal ── */
+      .modal {
+              background: var(--color-surface);
+              border: 1px solid var(--color-border);
+              border-radius: 10px;
+              box-shadow: 0 20px 68px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
+              width: 100%;
+              max-width: 480px;
+              overflow: hidden;
+              transform: translateY(16px);
+              transition: transform 0.2s ease;
+      }
+
+      .modal-overlay.is-open .modal { transform: translateY(0); }
+
+      .modal-titlebar,
+      .term-titlebar {
+              display: flex;
+              align-items: center;
+              gap: var(--space-2);
+              padding: var(--space-2) var(--space-3);
+              border-bottom: 1px solid var(--color-border);
+      }
+
+      .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+      .dot-a { background: var(--color-highlight); }
+      .dot-b { background: var(--color-accent); }
+      .dot-c { background: var(--color-text-muted); }
+
+      .modal-title {
+              margin-left: var(--space-2);
+              font-size: 0.8rem;
+              color: var(--color-text-muted);
+              flex: 1;
+      }
+
+      .modal-close {
+              font-family: inherit;
+              font-size: 1rem;
+              background: none;
+              border: none;
+              color: var(--color-text-muted);
+              cursor: pointer;
+              padding: 0;
+              line-height: 1;
+              transition: color 0.15s ease;
+      }
+
+      .modal-close:hover { color: var(--color-highlight); }
+
+      .modal-body { padding: var(--space-4) var(--space-4) var(--space-5); }
+
+      .contact-form { display: flex; flex-direction: column; gap: var(--space-3); }
+
+      .form-row { display: flex; flex-direction: column; gap: 4px; }
+
+      .form-row label { color: var(--color-text-muted); font-size: var(--font-size-meta); }
+
+      .form-row input,
+      .form-row textarea {
+              font-family: var(--font-mono);
+              font-size: inherit;
+              color: var(--color-text);
+              background: transparent;
+              border: none;
+              border-bottom: 1px solid var(--color-border);
+              padding: 0.2em 0;
+              resize: none;
+              outline: none;
+              width: 100%;
+              transition: border-color 0.15s ease;
+      }
+
+      .form-row input:focus,
+      .form-row textarea:focus { border-bottom-color: var(--color-accent); }
+
+      .form-actions { display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-1); }
+
+      .form-submit {
+              font-family: inherit;
+              font-size: var(--font-size-meta);
+              background: none;
+              border: 1px solid var(--color-accent);
+              border-radius: 4px;
+              color: var(--color-accent);
+              padding: 2px var(--space-2);
+              cursor: pointer;
+              transition: color 0.15s ease, border-color 0.15s ease;
+      }
+
+      .form-submit:hover { color: var(--color-highlight); border-color: var(--color-highlight); }
+      .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+      .form-status { font-size: var(--font-size-meta); color: var(--color-text-muted); }
+      .form-status.success { color: #4ade80; }
+      .form-status.error   { color: var(--color-highlight); }
 </style>
 
 <script>
-      const button = document.querySelector<HTMLButtonElement>('.copy-email');
-      const defaultLabel = button?.textContent?.trim() ?? '';
+      function initHome() {
+              // ── copy email ──
+              const copyBtn = document.querySelector<HTMLButtonElement>('.copy-email');
+              if (copyBtn) {
+                      const defaultLabel = copyBtn.textContent?.trim() ?? '';
+                      copyBtn.addEventListener('click', async () => {
+                              const email = copyBtn.dataset.email;
+                              if (!email) return;
+                              await navigator.clipboard.writeText(email);
+                              copyBtn.textContent = copyBtn.dataset.copiedLabel ?? defaultLabel;
+                              setTimeout(() => { copyBtn.textContent = defaultLabel; }, 1500);
+                      });
+              }
 
-      button?.addEventListener('click', async () => {
-              const email = button.dataset.email;
-              if (!email) return;
-              await navigator.clipboard.writeText(email);
-              button.textContent = button.dataset.copiedLabel ?? defaultLabel;
-              setTimeout(() => {
-                      button.textContent = defaultLabel;
-              }, 1500);
+              // ── contact modal ──
+              const contactOverlay = document.querySelector<HTMLElement>('#contact-modal');
+              const contactOpenBtn = document.querySelector<HTMLButtonElement>('.contact-open');
+              const contactCloseBtn = contactOverlay?.querySelector<HTMLButtonElement>('.modal-close');
+              const form = contactOverlay?.querySelector<HTMLFormElement>('.contact-form');
+
+              function openContact() {
+                      if (!contactOverlay) return;
+                      contactOverlay.classList.add('is-open');
+                      document.body.style.overflow = 'hidden';
+                      setTimeout(() => contactOverlay.querySelector<HTMLElement>('input')?.focus(), 50);
+              }
+
+              function closeContact() {
+                      if (!contactOverlay) return;
+                      contactOverlay.classList.remove('is-open');
+                      document.body.style.overflow = '';
+                      contactOpenBtn?.focus();
+              }
+
+              if (contactOverlay) {
+                      contactOpenBtn?.addEventListener('click', openContact);
+                      contactCloseBtn?.addEventListener('click', closeContact);
+                      contactOverlay.addEventListener('click', (e) => { if (e.target === contactOverlay) closeContact(); });
+                      contactOverlay.addEventListener('keydown', (e) => {
+                              if (e.key !== 'Tab') return;
+                              const els = Array.from(contactOverlay.querySelectorAll<HTMLElement>(
+                                      'input, textarea, button:not([disabled])'
+                              ));
+                              if (e.shiftKey && document.activeElement === els[0]) {
+                                      e.preventDefault(); els[els.length - 1].focus();
+                              } else if (!e.shiftKey && document.activeElement === els[els.length - 1]) {
+                                      e.preventDefault(); els[0].focus();
+                              }
+                      });
+              }
+
+              form?.addEventListener('submit', async (e) => {
+                      e.preventDefault();
+                      const submit = form.querySelector<HTMLButtonElement>('.form-submit');
+                      const status = form.querySelector<HTMLElement>('.form-status');
+                      if (!submit || !status) return;
+                      submit.disabled = true;
+                      status.textContent = '';
+                      status.className = 'form-status';
+                      try {
+                              const res = await fetch(form.action, {
+                                      method: 'POST',
+                                      body: new FormData(form),
+                                      headers: { 'Accept': 'application/json' },
+                              });
+                              if (res.ok) {
+                                      status.textContent = form.dataset.success ?? 'sent.';
+                                      status.classList.add('success');
+                                      form.reset();
+                                      setTimeout(closeContact, 1800);
+                              } else { throw new Error(); }
+                      } catch {
+                              status.textContent = form.dataset.error ?? 'error.';
+                              status.classList.add('error');
+                              submit.disabled = false;
+                      }
+              });
+
+              // ── terminal modal ──
+              const trigger     = document.querySelector<HTMLButtonElement>('.cli-trigger');
+              const termOverlay = document.querySelector<HTMLElement>('#terminal-modal');
+              const termBody    = document.querySelector<HTMLElement>('#term-body');
+              const termInput   = document.querySelector<HTMLInputElement>('#term-input');
+              const termCloseBtn = termOverlay?.querySelector<HTMLButtonElement>('.term-close');
+
+              if (!trigger || !termOverlay || !termBody || !termInput) return;
+
+              const cliLang     = trigger.dataset.lang ?? 'pt';
+              const projectsUrl = trigger.dataset.projects ?? '/projetos';
+              const userPrompt  = trigger.dataset.user ?? 'matheus@pinheiro:~$';
+
+              const WELCOME = cliLang === 'en'
+                      ? ['Type "help" to see available commands.', 'Press Esc or type "exit" to close.']
+                      : ['Digite "help" para ver os comandos disponíveis.', 'Pressione Esc ou digite "exit" para fechar.'];
+
+              const HELP = cliLang === 'en'
+                      ? 'Available commands: projects, contact, clear, exit'
+                      : 'Comandos disponíveis: projetos, contato, clear, exit';
+
+              function addLine(text: string, type: 'default' | 'cmd' | 'error' = 'default') {
+                      const p = document.createElement('p');
+                      p.className = type === 'default' ? 'term-line' : `term-line term-line--${type}`;
+                      p.textContent = text;
+                      termBody.appendChild(p);
+                      termBody.scrollTop = termBody.scrollHeight;
+              }
+
+              function typeLines(lines: string[], onDone: () => void) {
+                      let lineIdx = 0;
+                      function typeLine() {
+                              if (lineIdx >= lines.length) { onDone(); return; }
+                              const p = document.createElement('p');
+                              p.className = 'term-line';
+                              termBody.appendChild(p);
+                              const text = lines[lineIdx++];
+                              let charIdx = 0;
+                              const tick = () => {
+                                      if (charIdx < text.length) {
+                                              p.textContent += text[charIdx++];
+                                              termBody.scrollTop = termBody.scrollHeight;
+                                              setTimeout(tick, 18);
+                                      } else {
+                                              setTimeout(typeLine, 80);
+                                      }
+                              };
+                              tick();
+                      }
+                      typeLine();
+              }
+
+              function openTerminal() {
+                      termBody.innerHTML = '';
+                      termOverlay.classList.add('is-open');
+                      document.body.style.overflow = 'hidden';
+                      typeLines(WELCOME, () => termInput.focus());
+              }
+
+              function closeTerminal() {
+                      termOverlay.classList.remove('is-open');
+                      document.body.style.overflow = '';
+                      trigger.focus();
+              }
+
+              trigger.addEventListener('click', openTerminal);
+              termCloseBtn?.addEventListener('click', closeTerminal);
+              termOverlay.addEventListener('click', (e) => { if (e.target === termOverlay) closeTerminal(); });
+
+              termInput.addEventListener('keydown', (e) => {
+                      if (e.key !== 'Enter') return;
+                      const cmd = termInput.value.trim().toLowerCase();
+                      termInput.value = '';
+                      if (!cmd) return;
+
+                      addLine(`${userPrompt} ${cmd}`, 'cmd');
+
+                      if (cmd === 'help' || cmd === 'ajuda') {
+                              addLine(HELP);
+                      } else if (cmd === 'projetos' || cmd === 'projects') {
+                              addLine(cliLang === 'en' ? '→ navigating to projects...' : '→ navegando para projetos...');
+                              setTimeout(() => { window.location.href = projectsUrl; }, 500);
+                      } else if (cmd === 'contato' || cmd === 'contact') {
+                              closeTerminal();
+                              setTimeout(openContact, 300);
+                      } else if (cmd === 'clear' || cmd === 'limpar') {
+                              termBody.innerHTML = '';
+                      } else if (cmd === 'exit' || cmd === 'sair') {
+                              setTimeout(closeTerminal, 150);
+                      } else {
+                              addLine(`command not found: ${cmd}`, 'error');
+                      }
+              });
+
+              document.addEventListener('keydown', (e) => {
+                      if (e.key !== 'Escape') return;
+                      if (termOverlay.classList.contains('is-open')) closeTerminal();
+                      else if (contactOverlay?.classList.contains('is-open')) closeContact();
+              });
+      }
+
+      document.addEventListener('astro:before-swap', () => {
+              document.body.style.overflow = '';
       });
+
+      document.addEventListener('astro:page-load', initHome);
 </script>

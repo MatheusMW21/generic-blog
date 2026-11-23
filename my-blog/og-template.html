@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1200px;
+    height: 630px;
+    background: #0d0b12;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    color: #ede9f3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .card {
+    width: 1100px;
+    border: 1px solid #2a2333;
+    border-radius: 16px;
+    background: #141019;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+  }
+  .titlebar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #2a2333;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-a { background: #ef4444; }
+  .dot-b { background: #c084fc; }
+  .dot-c { background: #9c93ab; }
+  .label { margin-left: 8px; font-size: 13px; color: #9c93ab; }
+  .body {
+    padding: 48px 56px;
+  }
+  .cmd {
+    font-size: 15px;
+    color: #9c93ab;
+    margin-bottom: 24px;
+  }
+  .cmd .prompt { color: #ef4444; margin-right: 8px; }
+  .name {
+    font-size: 52px;
+    font-weight: 700;
+    color: #c084fc;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .role {
+    font-size: 20px;
+    color: #9c93ab;
+    margin-bottom: 40px;
+  }
+  .available {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #4ade80;
+  }
+  .dot-green {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+  }
+  .url {
+    position: absolute;
+    bottom: 48px;
+    right: 56px;
+    font-size: 14px;
+    color: #2a2333;
+  }
+</style>
+</head>
+<body>
+  <div class="card" style="position:relative;">
+    <div class="titlebar">
+      <span class="dot dot-a"></span>
+      <span class="dot dot-b"></span>
+      <span class="dot dot-c"></span>
+      <span class="label">matheus@pinheiro — zsh</span>
+    </div>
+    <div class="body">
+      <p class="cmd"><span class="prompt">$</span> whoami</p>
+      <h1 class="name">Matheus Pinheiro</h1>
+      <p class="role">desenvolvedor fullstack · backend</p>
+      <p class="available">
+        <span class="dot-green"></span>
+        disponível para freelance
+      </p>
+    </div>
+    <span class="url">matheuspinheiro.dev</span>
+  </div>
+</body>
+</html>

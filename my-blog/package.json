@@ -12,7 +12,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.3.2"
+    "@astrojs/sitemap": "^3.7.6",
+    "astro": "^7.3.2",
+    "gsap": "^3.15.1"
   },
   "allowScripts": {
     "esbuild": true

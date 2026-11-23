@@ -1,5 +1,6 @@
 export const profile = {
   name: "Matheus Pinheiro",
+  available: true,
   social: {
     github: "https://github.com/MatheusMW21",
     linkedin: "https://linkedin.com/in/matheuspinheiro08",

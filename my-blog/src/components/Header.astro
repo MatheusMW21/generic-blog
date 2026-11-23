@@ -48,13 +48,18 @@ const langToggleHref = getRelativeLocaleUrl(otherLang, basePath);
 		</div>
 	</div>
 
-	<p class="cmd"><span class="prompt" aria-hidden="true">$</span> {t('whoami_cmd')}</p>
+	<p class="cmd"><span class="prompt" aria-hidden="true">$</span> <span class="cmd-text">{t('whoami_cmd')}</span></p>
 	<div class="hero">
 		<img class="avatar" src="/avatar.jpg" alt="Foto de perfil" />
 		<div class="identity">
 			<h1 class="name">{profile.name}</h1>
 			<p class="tagline">{p.role}</p>
-
+		{profile.available && (
+			<p class="available">
+				<span class="available-dot" aria-hidden="true"></span>
+				{t('available_label')}
+			</p>
+		)}
 		</div>
 	</div>
 </header>
@@ -216,6 +221,29 @@ const langToggleHref = getRelativeLocaleUrl(otherLang, basePath);
 		color: var(--color-text-muted);
 	}
 
+	.available {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		margin: var(--space-2) 0 0;
+		font-size: var(--font-size-meta);
+		color: #4ade80;
+	}
+
+	.available-dot {
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: #4ade80;
+		flex-shrink: 0;
+		animation: pulse-dot 2s ease-in-out infinite;
+	}
+
+	@keyframes pulse-dot {
+		0%, 100% { opacity: 1; transform: scale(1); }
+		50%       { opacity: 0.4; transform: scale(0.75); }
+	}
+
 	@media (max-width: 640px) {
 		.hero {
 			flex-direction: column;
@@ -225,12 +253,33 @@ const langToggleHref = getRelativeLocaleUrl(otherLang, basePath);
 	}
 </style>
 <script>
-	const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
+	document.addEventListener('astro:page-load', () => {
+		const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
+		button?.addEventListener('click', () => {
+			const root = document.documentElement;
+			const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+			root.dataset.theme = next;
+			localStorage.setItem('theme', next);
+		});
+	});
 
-	button?.addEventListener('click', () => {
-		const root = document.documentElement;
-		const next = root.dataset.theme === 'light' ? 'dark' : 'light';
-		root.dataset.theme = next;
-		localStorage.setItem('theme', next);
+	document.addEventListener('astro:page-load', () => {
+		if (sessionStorage.getItem('portfolio_visited')) return;
+		sessionStorage.setItem('portfolio_visited', '1');
+
+		const el = document.querySelector<HTMLElement>('.cmd-text');
+		if (!el) return;
+
+		const text = el.textContent ?? '';
+		el.textContent = '';
+		let i = 0;
+
+		const type = () => {
+			if (i < text.length) {
+				el.textContent += text[i++];
+				setTimeout(type, 80);
+			}
+		};
+		type();
 	});
 </script>

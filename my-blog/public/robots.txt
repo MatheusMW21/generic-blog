@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://matheuspinheiro.dev/sitemap-index.xml
