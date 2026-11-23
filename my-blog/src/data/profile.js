@@ -7,9 +7,9 @@ export const profile = {
     email: "matheusmw21@gmail.com",
   },
   pt: {
-    role: "desenvolvedor fullstack · backend",
+    role: "desenvolvedor fullstack",
 
-    bio: "Desenvolvedor Fullstack com foco em Backend, com 3+ anos de experiência em sistemas de alta disponibilidade. Fora do código, sou o maior fã de Beatles e adoro literatura, cinema e video-game e aqui compartilho um pouco dos dois lados.",
+    bio: "Desenvolvedor Fullstack, com 3+ anos de experiência em sistemas de alta disponibilidade. Fora do código, sou o maior fã de Beatles e adoro literatura, cinema e video-game e aqui compartilho um pouco dos dois lados.",
     experience: [
       {
         empresa: "TeamSix",
